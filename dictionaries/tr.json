@@ -1,0 +1,107 @@
+{
+  "nav": {
+    "home": "Ana Sayfa",
+    "about": "Hakkımızda",
+    "classes": "Dersler",
+    "schedule": "Program",
+    "trainers": "Eğitmenler",
+    "pricing": "Üyelik & Ücretler",
+    "blog": "Blog",
+    "gallery": "Galeri",
+    "faq": "SSS",
+    "contact": "İletişim",
+    "dashboard": "Panelim",
+    "admin": "Yönetici"
+  },
+  "hero": {
+    "headline_1": "Move Better.",
+    "headline_2": "Feel Better.",
+    "headline_3": "Live Better.",
+    "subheadline": "UM Pilates ve Yoga deneyiminin dijital evreni: The Yumiverse. Pilates ve Yoga ile zihninizi ve bedeninizi yenileyin. Arsuz ve İskenderun'da lüks ve huzurlu bir wellness deneyimi.",
+    "cta_book": "Ders Programı",
+    "cta_explore": "Dersleri Keşfet"
+  },
+  "common": {
+    "login": "Giriş Yap",
+    "register": "Kayıt Ol",
+    "logout": "Çıkış Yap",
+    "read_more": "Devamını Oku",
+    "loading": "Yükleniyor...",
+    "save": "Kaydet",
+    "cancel": "İptal",
+    "delete": "Sil",
+    "edit": "Düzenle",
+    "minutes": "dakika",
+    "sessions": "ders",
+    "days": "gün",
+    "price": "Fiyat",
+    "level": "Seviye",
+    "all_levels": "Tüm Seviyeler",
+    "beginner": "Başlangıç",
+    "intermediate": "Orta",
+    "advanced": "İleri",
+    "trainer": "Eğitmen",
+    "capacity": "Kapasite",
+    "category": "Kategori",
+    "date": "Tarih",
+    "time": "Saat"
+  },
+  "about_page": {
+    "title": "Biz Kimiz?",
+    "story": "UM Pilates ve Yoga deneyiminin dijital evreni: The Yumiverse, modern hayatın getirdiği stresi arkamızda bırakıp, bedenimiz ve zihnimizle yeniden bağ kurmak için kurulmuş lüks bir wellness merkezidir. İskenderun ve Arsuz'un eşsiz doğasından ilham alan stüdyomuz, modern İskandinav tasarımı, dingin atmosferi ve profesyonel eğitmen kadrosuyla kendinizi özel hissedeceğiniz bir deneyim sunar.",
+    "mission": "Misyonumuz",
+    "mission_text": "Bedeninizin gücünü keşfetmenizi sağlamak, hareket kalitenizi artırmak ve zihinsel sakinliği günlük hayatınızın bir parçası haline getirmek.",
+    "vision": "Vizyonumuz",
+    "vision_text": "Wellness felsefesini premium ve erişilebilir bir çizgide birleştirerek, bölgenin en prestijli yoga ve reformer pilates topluluğunu oluşturmak."
+  },
+  "pricing_page": {
+    "title": "Üyelikler ve Paketler",
+    "subtitle": "Size en uygun paketi seçin ve hemen başlayın. Kalan ders haklarınızı panelinizden kolayca takip edebilirsiniz.",
+    "single_class": "Tek Ders",
+    "package_buy": "Paketi Satın Al",
+    "remaining_format": "{remaining} / {total} ders hakkı"
+  },
+  "blog_page": {
+    "title": "Sağlıklı Yaşam Rehberi",
+    "subtitle": "Yoga, pilates, beslenme ve bütünsel wellness üzerine en güncel yazılarımız.",
+    "search_placeholder": "Yazılarda ara...",
+    "categories": "Kategoriler",
+    "reading_time": "{time} dk okuma süresi",
+    "related_articles": "İlgili Yazılar"
+  },
+  "schedule_page": {
+    "title": "Haftalık Ders Programı",
+    "subtitle": "Günün yorgunluğunu geride bırakmak için size en uygun dersi seçip hemen rezervasyon yapın.",
+    "filters": {
+      "all_trainers": "Tüm Eğitmenler",
+      "all_classes": "Tüm Ders Tipleri",
+      "all_levels": "Tüm Seviyeler"
+    },
+    "no_classes": "Seçilen filtrelerde ders bulunmamaktadır.",
+    "book_now": "Hemen Rezervasyon Yap",
+    "fully_booked": "Kontenjan Dolu",
+    "cancelled": "Ders İptal Edildi"
+  },
+  "dashboard_page": {
+    "title": "Kişisel Paneliniz",
+    "subtitle": "Yaklaşık rezervasyonlarınızı, paket haklarınızı ve geçmiş derslerinizi buradan yönetin.",
+    "upcoming_reservations": "Yaklaşan Rezervasyonlarım",
+    "past_reservations": "Geçmiş Derslerim",
+    "active_packages": "Aktif Paketlerim",
+    "no_reservations": "Henüz bir rezervasyonunuz bulunmuyor.",
+    "no_packages": "Aktif bir paketiniz bulunmuyor.",
+    "cancel_booking": "Rezervasyonu İptal Et",
+    "whatsapp_confirm": "WhatsApp ile Destek Al",
+    "calendar_sync": "Google Calendar ile Eşitle"
+  },
+  "contact_page": {
+    "title": "Bizimle İletişime Geçin",
+    "subtitle": "Sorularınız, rezervasyon destek ve işbirlikleri için bize yazın veya WhatsApp'tan tek tıkla ulaşın.",
+    "form_name": "Adınız",
+    "form_email": "E-posta Adresiniz",
+    "form_message": "Mesajınız",
+    "form_submit": "Gönder",
+    "whatsapp_button": "Hızlı WhatsApp İletişimi",
+    "address": "Hacı Bektaş-ı Veli Caddesi No: 32/A Hatay Arsuz"
+  }
+}

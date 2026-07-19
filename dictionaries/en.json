@@ -1,0 +1,107 @@
+{
+  "nav": {
+    "home": "Home",
+    "about": "About Us",
+    "classes": "Classes",
+    "schedule": "Schedule",
+    "trainers": "Trainers",
+    "pricing": "Memberships & Pricing",
+    "blog": "Blog",
+    "gallery": "Gallery",
+    "faq": "FAQ",
+    "contact": "Contact",
+    "dashboard": "My Dashboard",
+    "admin": "Admin"
+  },
+  "hero": {
+    "headline_1": "Move Better.",
+    "headline_2": "Feel Better.",
+    "headline_3": "Live Better.",
+    "subheadline": "The digital universe of the UM Pilates & Yoga experience: The Yumiverse. Rejuvenate your mind and body with Pilates and Yoga in Arsuz & Iskenderun.",
+    "cta_book": "Class Schedule",
+    "cta_explore": "Explore Classes"
+  },
+  "common": {
+    "login": "Login",
+    "register": "Sign Up",
+    "logout": "Logout",
+    "read_more": "Read More",
+    "loading": "Loading...",
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "minutes": "mins",
+    "sessions": "classes",
+    "days": "days",
+    "price": "Price",
+    "level": "Level",
+    "all_levels": "All Levels",
+    "beginner": "Beginner",
+    "intermediate": "Intermediate",
+    "advanced": "Advanced",
+    "trainer": "Trainer",
+    "capacity": "Capacity",
+    "category": "Category",
+    "date": "Date",
+    "time": "Time"
+  },
+  "about_page": {
+    "title": "Who We Are",
+    "story": "The digital universe of the UM Pilates & Yoga experience: The Yumiverse is a luxury wellness sanctuary founded to help you leave modern stresses behind and reconnect with your mind and body. Inspired by the unique nature of Iskenderun and Arsuz, our studio offers a personalized, premium experience with a sleek Scandinavian design, a calm atmosphere, and a highly professional training staff.",
+    "mission": "Our Mission",
+    "mission_text": "To empower you to discover your body's strength, improve your quality of movement, and cultivate mental stillness as a daily practice.",
+    "vision": "Our Vision",
+    "vision_text": "By combining wellness philosophy with an elegant and premium feel, we aim to build the most prestigious yoga and reformer pilates community in the region."
+  },
+  "pricing_page": {
+    "title": "Memberships and Packages",
+    "subtitle": "Choose the best package for you and start immediately. Track your remaining sessions easily from your personal dashboard.",
+    "single_class": "Single Class",
+    "package_buy": "Buy Package",
+    "remaining_format": "{remaining} / {total} classes remaining"
+  },
+  "blog_page": {
+    "title": "Wellness Guide",
+    "subtitle": "Our latest articles on Yoga, Reformer Pilates, healthy nutrition, and holistic lifestyle.",
+    "search_placeholder": "Search articles...",
+    "categories": "Categories",
+    "reading_time": "{time} min read",
+    "related_articles": "Related Articles"
+  },
+  "schedule_page": {
+    "title": "Weekly Timetable",
+    "subtitle": "Leave the day's stress behind. Find the perfect session for you and book in seconds.",
+    "filters": {
+      "all_trainers": "All Trainers",
+      "all_classes": "All Class Types",
+      "all_levels": "All Levels"
+    },
+    "no_classes": "No classes match the selected criteria.",
+    "book_now": "Book Session",
+    "fully_booked": "Fully Booked",
+    "cancelled": "Class Cancelled"
+  },
+  "dashboard_page": {
+    "title": "Your Dashboard",
+    "subtitle": "Manage your upcoming reservations, class package balances, and booking history.",
+    "upcoming_reservations": "My Upcoming Bookings",
+    "past_reservations": "My Past Classes",
+    "active_packages": "My Active Packages",
+    "no_reservations": "You don't have any bookings yet.",
+    "no_packages": "You don't have any active class packages.",
+    "cancel_booking": "Cancel Booking",
+    "whatsapp_confirm": "WhatsApp Support",
+    "calendar_sync": "Sync to Google Calendar"
+  },
+  "contact_page": {
+    "title": "Get In Touch",
+    "subtitle": "Reach out to us for questions, reservation issues, or collaboration. Connect instantly with one tap via WhatsApp.",
+    "form_name": "Your Name",
+    "form_email": "Your Email",
+    "form_message": "Your Message",
+    "form_submit": "Submit",
+    "whatsapp_button": "Quick WhatsApp Chat",
+    "address": "Hacı Bektaş-ı Veli Caddesi No: 32/A Hatay Arsuz"
+  }
+}
