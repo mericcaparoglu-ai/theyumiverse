@@ -94,7 +94,7 @@ export default function HomePage(props: PageProps) {
           >
             <span className="w-2 h-2 rounded-full bg-sage-500 animate-ping" />
             <span className="text-[10px] tracking-widest uppercase font-semibold text-charcoal-700">
-              {locale === 'tr' ? 'Arsuz & İskenderun Premium Stüdyosu' : 'Arsuz & Iskenderun Premium Studio'}
+              {locale === 'tr' ? "Arsuz & İskenderun'un Premium Stüdyosu" : 'Arsuz & Iskenderun Premium Studio'}
             </span>
           </motion.div>
 
