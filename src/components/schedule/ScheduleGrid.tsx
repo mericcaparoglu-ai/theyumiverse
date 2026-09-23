@@ -81,6 +81,25 @@ const DAYS_OF_WEEK_EN = [
 // JS: 0 = Sunday … 6 = Saturday  ->  schedule: 1 = Monday … 7 = Sunday
 const getTodayId = () => new Date().getDay() || 7;
 
+// Per-category card styling: Reformer keeps the minimal white card,
+// Yoga gets a soft sage tone. Meta text uses sage-700 on the sage tint (≥5:1 contrast).
+const CARD_THEMES = {
+  reformer_pilates: {
+    card: 'bg-white border-sand-200 hover:border-sage-500',
+    meta: 'text-charcoal-500',
+    icon: 'text-sage-500',
+    cta: 'text-emerald-700',
+    badge: null,
+  },
+  yoga: {
+    card: 'bg-sage-100/70 border-sage-200 hover:border-sage-500',
+    meta: 'text-sage-700',
+    icon: 'text-sage-700',
+    cta: 'text-sage-700',
+    badge: 'bg-white/70 text-sage-700 border-sage-200',
+  },
+} as const;
+
 const selectClassName =
   'w-full sm:w-auto text-[11px] sm:text-xs tracking-normal sm:tracking-wider sm:uppercase font-medium bg-sand-50/80 border border-sand-200 rounded-full pl-3 pr-2 sm:px-4 py-2.5 outline-none focus:border-sage-500 transition-premium cursor-pointer';
 
@@ -292,7 +311,9 @@ export default function ScheduleGrid({
               {/* Class Cards */}
               <div className="space-y-3">
                 {items.length > 0 ? (
-                  items.map((item) => (
+                  items.map((item) => {
+                    const theme = CARD_THEMES[item.classInfo?.category ?? 'reformer_pilates'];
+                    return (
                     <motion.a
                       key={item.id}
                       href={getBookingUrl(item)}
@@ -300,12 +321,20 @@ export default function ScheduleGrid({
                       rel="noopener noreferrer"
                       initial={{ opacity: 0, y: 10 }}
                       animate={{ opacity: 1, y: 0 }}
-                      className="group p-5 lg:p-3.5 xl:p-4 rounded-3xl lg:rounded-2xl border border-sand-200 bg-white shadow-sm lg:shadow-none hover:shadow-md hover:border-sage-500 transition-premium flex items-center lg:items-start justify-between gap-3 lg:min-h-32 min-w-0"
+                      data-category={item.classInfo?.category}
+                      className={`group p-5 lg:p-3.5 xl:p-4 rounded-3xl lg:rounded-2xl border ${theme.card} shadow-sm lg:shadow-none hover:shadow-md hover:border-sage-500 transition-premium flex items-center lg:items-start justify-between gap-3 lg:min-h-32 min-w-0`}
                     >
                       <div className="space-y-1.5 lg:space-y-2 min-w-0">
+                        {/* Category badge (yoga only) */}
+                        {theme.badge && (
+                          <span className={`inline-block text-[9px] uppercase tracking-widest font-bold px-2 py-0.5 rounded-full border ${theme.badge}`}>
+                            Yoga
+                          </span>
+                        )}
+
                         {/* Time tag */}
-                        <div className="flex flex-wrap items-center text-[10px] tracking-wider lg:tracking-widest text-charcoal-500 font-semibold uppercase">
-                          <Clock className="w-3.5 h-3.5 mr-1 text-sage-500 shrink-0" />
+                        <div className={`flex flex-wrap items-center text-[10px] tracking-wider lg:tracking-widest ${theme.meta} font-semibold uppercase`}>
+                          <Clock className={`w-3.5 h-3.5 mr-1 ${theme.icon} shrink-0`} />
                           <span>{item.time}</span>
                           <span className="ml-1 font-medium opacity-80">
                             ({item.classInfo?.duration} {minutesShort})
@@ -318,19 +347,20 @@ export default function ScheduleGrid({
                         </h4>
 
                         {/* Trainer */}
-                        <div className="flex items-center text-[10px] text-charcoal-500 italic min-w-0">
+                        <div className={`flex items-center text-[10px] ${theme.meta} italic min-w-0`}>
                           <User className="w-3 h-3 lg:w-3.5 lg:h-3.5 mr-1 opacity-70 shrink-0" />
                           <span className="truncate">{item.trainerInfo?.name}</span>
                         </div>
                       </div>
 
                       {/* Mobile booking affordance */}
-                      <span className="lg:hidden shrink-0 flex items-center gap-1 text-[10px] uppercase tracking-widest font-semibold text-emerald-700">
+                      <span className={`lg:hidden shrink-0 flex items-center gap-1 text-[10px] uppercase tracking-widest font-semibold ${theme.cta}`}>
                         {dict.schedule_page?.book || (locale === 'tr' ? 'Rezervasyon' : 'Book')}
                         <ArrowRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-0.5" />
                       </span>
                     </motion.a>
-                  ))
+                    );
+                  })
                 ) : (
                   <div className="py-16 lg:py-8 text-center text-xs lg:text-[10px] tracking-wider text-charcoal-500 italic opacity-60 bg-white/20 lg:bg-transparent rounded-3xl border border-dashed border-sand-200 lg:border-0">
                     {emptyText}
