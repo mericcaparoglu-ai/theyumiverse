@@ -5,6 +5,7 @@ import { User, Clock, ArrowRight } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { CLASS_TYPES, getClassName } from '@/lib/classes';
 import { getWhatsappUrl } from '@/lib/studio';
+import { TRAINERS, getTrainer } from '@/lib/trainers';
 
 interface ScheduleGridProps {
   locale: 'tr' | 'en';
@@ -13,66 +14,43 @@ interface ScheduleGridProps {
   isAuthenticated: boolean;
 }
 
-// Structured Mock Data for premium display
-const MOCK_TRAINERS = [
-  { id: 't1', name: 'Ümran Çaparoğlu', slug: 'umran-caparoglu' },
-];
-
+// Weekly timetable (Mon–Fri). Class names come from CLASS_TYPES, trainers from TRAINERS.
+// c6 = Reformer Grup (Maks. 7 Kişi) · Ümran Solmaz | c7 = Hatha Yoga · Meriç Çaparoğlu
 const MOCK_SCHEDULE = [
   // Pazartesi / Monday
-  { id: 's101', class_id: 'c1', trainer_id: 't1', day: 1, time: '09:00', capacity: 1, booked: 0 },
+  { id: 's101', class_id: 'c7', trainer_id: 't2', day: 1, time: '09:00', capacity: 10, booked: 0 },
   { id: 's102', class_id: 'c6', trainer_id: 't1', day: 1, time: '10:00', capacity: 7, booked: 0 },
-  { id: 's103', class_id: 'c2', trainer_id: 't1', day: 1, time: '11:00', capacity: 2, booked: 0 },
-  { id: 's104', class_id: 'c1', trainer_id: 't1', day: 1, time: '12:00', capacity: 1, booked: 0 },
-  { id: 's105', class_id: 'c1', trainer_id: 't1', day: 1, time: '16:30', capacity: 1, booked: 0 },
-  { id: 's106', class_id: 'c6', trainer_id: 't1', day: 1, time: '17:30', capacity: 7, booked: 0 },
-  { id: 's107', class_id: 'c2', trainer_id: 't1', day: 1, time: '18:30', capacity: 2, booked: 0 },
-  { id: 's108', class_id: 'c5', trainer_id: 't1', day: 1, time: '19:30', capacity: 7, booked: 0 },
-  { id: 's109', class_id: 'c1', trainer_id: 't1', day: 1, time: '20:10', capacity: 1, booked: 0 },
+  { id: 's103', class_id: 'c6', trainer_id: 't1', day: 1, time: '17:30', capacity: 7, booked: 0 },
+  { id: 's104', class_id: 'c6', trainer_id: 't1', day: 1, time: '18:30', capacity: 7, booked: 0 },
+  { id: 's105', class_id: 'c6', trainer_id: 't1', day: 1, time: '19:30', capacity: 7, booked: 0 },
 
   // Salı / Tuesday
   { id: 's201', class_id: 'c6', trainer_id: 't1', day: 2, time: '09:00', capacity: 7, booked: 0 },
-  { id: 's202', class_id: 'c1', trainer_id: 't1', day: 2, time: '10:00', capacity: 1, booked: 0 },
-  { id: 's203', class_id: 'c5', trainer_id: 't1', day: 2, time: '11:00', capacity: 7, booked: 0 },
-  { id: 's204', class_id: 'c2', trainer_id: 't1', day: 2, time: '12:00', capacity: 2, booked: 0 },
-  { id: 's205', class_id: 'c2', trainer_id: 't1', day: 2, time: '16:30', capacity: 2, booked: 0 },
-  { id: 's206', class_id: 'c1', trainer_id: 't1', day: 2, time: '17:30', capacity: 1, booked: 0 },
-  { id: 's207', class_id: 'c6', trainer_id: 't1', day: 2, time: '18:30', capacity: 7, booked: 0 },
-  { id: 's208', class_id: 'c1', trainer_id: 't1', day: 2, time: '19:30', capacity: 1, booked: 0 },
-  { id: 's209', class_id: 'c6', trainer_id: 't1', day: 2, time: '20:10', capacity: 7, booked: 0 },
+  { id: 's202', class_id: 'c6', trainer_id: 't1', day: 2, time: '10:00', capacity: 7, booked: 0 },
+  { id: 's203', class_id: 'c6', trainer_id: 't1', day: 2, time: '17:30', capacity: 7, booked: 0 },
+  { id: 's204', class_id: 'c6', trainer_id: 't1', day: 2, time: '18:30', capacity: 7, booked: 0 },
+  { id: 's205', class_id: 'c7', trainer_id: 't2', day: 2, time: '19:30', capacity: 10, booked: 0 },
 
   // Çarşamba / Wednesday
-  { id: 's301', class_id: 'c1', trainer_id: 't1', day: 3, time: '09:00', capacity: 1, booked: 0 },
+  { id: 's301', class_id: 'c7', trainer_id: 't2', day: 3, time: '09:00', capacity: 10, booked: 0 },
   { id: 's302', class_id: 'c6', trainer_id: 't1', day: 3, time: '10:00', capacity: 7, booked: 0 },
-  { id: 's303', class_id: 'c2', trainer_id: 't1', day: 3, time: '11:00', capacity: 2, booked: 0 },
-  { id: 's304', class_id: 'c1', trainer_id: 't1', day: 3, time: '12:00', capacity: 1, booked: 0 },
-  { id: 's305', class_id: 'c1', trainer_id: 't1', day: 3, time: '16:30', capacity: 1, booked: 0 },
-  { id: 's306', class_id: 'c6', trainer_id: 't1', day: 3, time: '17:30', capacity: 7, booked: 0 },
-  { id: 's307', class_id: 'c2', trainer_id: 't1', day: 3, time: '18:30', capacity: 2, booked: 0 },
-  { id: 's308', class_id: 'c5', trainer_id: 't1', day: 3, time: '19:30', capacity: 7, booked: 0 },
-  { id: 's309', class_id: 'c1', trainer_id: 't1', day: 3, time: '20:10', capacity: 1, booked: 0 },
+  { id: 's303', class_id: 'c6', trainer_id: 't1', day: 3, time: '17:30', capacity: 7, booked: 0 },
+  { id: 's304', class_id: 'c6', trainer_id: 't1', day: 3, time: '18:30', capacity: 7, booked: 0 },
+  { id: 's305', class_id: 'c6', trainer_id: 't1', day: 3, time: '19:30', capacity: 7, booked: 0 },
 
   // Perşembe / Thursday
   { id: 's401', class_id: 'c6', trainer_id: 't1', day: 4, time: '09:00', capacity: 7, booked: 0 },
-  { id: 's402', class_id: 'c1', trainer_id: 't1', day: 4, time: '10:00', capacity: 1, booked: 0 },
-  { id: 's403', class_id: 'c5', trainer_id: 't1', day: 4, time: '11:00', capacity: 7, booked: 0 },
-  { id: 's404', class_id: 'c2', trainer_id: 't1', day: 4, time: '12:00', capacity: 2, booked: 0 },
-  { id: 's405', class_id: 'c2', trainer_id: 't1', day: 4, time: '16:30', capacity: 2, booked: 0 },
-  { id: 's406', class_id: 'c1', trainer_id: 't1', day: 4, time: '17:30', capacity: 1, booked: 0 },
-  { id: 's407', class_id: 'c6', trainer_id: 't1', day: 4, time: '18:30', capacity: 7, booked: 0 },
-  { id: 's408', class_id: 'c1', trainer_id: 't1', day: 4, time: '19:30', capacity: 1, booked: 0 },
-  { id: 's409', class_id: 'c6', trainer_id: 't1', day: 4, time: '20:10', capacity: 7, booked: 0 },
+  { id: 's402', class_id: 'c6', trainer_id: 't1', day: 4, time: '10:00', capacity: 7, booked: 0 },
+  { id: 's403', class_id: 'c6', trainer_id: 't1', day: 4, time: '17:30', capacity: 7, booked: 0 },
+  { id: 's404', class_id: 'c6', trainer_id: 't1', day: 4, time: '18:30', capacity: 7, booked: 0 },
+  { id: 's405', class_id: 'c7', trainer_id: 't2', day: 4, time: '19:30', capacity: 10, booked: 0 },
 
   // Cuma / Friday
-  { id: 's501', class_id: 'c1', trainer_id: 't1', day: 5, time: '09:00', capacity: 1, booked: 0 },
+  { id: 's501', class_id: 'c6', trainer_id: 't1', day: 5, time: '09:00', capacity: 7, booked: 0 },
   { id: 's502', class_id: 'c6', trainer_id: 't1', day: 5, time: '10:00', capacity: 7, booked: 0 },
-  { id: 's503', class_id: 'c2', trainer_id: 't1', day: 5, time: '11:00', capacity: 2, booked: 0 },
-  { id: 's504', class_id: 'c1', trainer_id: 't1', day: 5, time: '12:00', capacity: 1, booked: 0 },
-  { id: 's505', class_id: 'c1', trainer_id: 't1', day: 5, time: '16:30', capacity: 1, booked: 0 },
-  { id: 's506', class_id: 'c6', trainer_id: 't1', day: 5, time: '17:30', capacity: 7, booked: 0 },
-  { id: 's507', class_id: 'c2', trainer_id: 't1', day: 5, time: '18:30', capacity: 2, booked: 0 },
-  { id: 's508', class_id: 'c5', trainer_id: 't1', day: 5, time: '19:30', capacity: 7, booked: 0 },
-  { id: 's509', class_id: 'c1', trainer_id: 't1', day: 5, time: '20:10', capacity: 1, booked: 0 },
+  { id: 's503', class_id: 'c6', trainer_id: 't1', day: 5, time: '17:30', capacity: 7, booked: 0 },
+  { id: 's504', class_id: 'c6', trainer_id: 't1', day: 5, time: '18:30', capacity: 7, booked: 0 },
+  { id: 's505', class_id: 'c6', trainer_id: 't1', day: 5, time: '19:30', capacity: 7, booked: 0 },
 ];
 
 const DAYS_OF_WEEK_TR = [
@@ -118,7 +96,7 @@ export default function ScheduleGrid({
 
   // Only offer a trainer filter when there is actually something to choose between
   const scheduledTrainers = useMemo(
-    () => MOCK_TRAINERS.filter((t) => MOCK_SCHEDULE.some((s) => s.trainer_id === t.id)),
+    () => TRAINERS.filter((t) => MOCK_SCHEDULE.some((s) => s.trainer_id === t.id)),
     []
   );
   const showTrainerFilter = scheduledTrainers.length > 1;
@@ -130,7 +108,7 @@ export default function ScheduleGrid({
   const filteredSchedule = useMemo(() => {
     return MOCK_SCHEDULE.map((item) => {
       const classInfo = CLASS_TYPES.find((c) => c.id === item.class_id);
-      const trainerInfo = MOCK_TRAINERS.find((t) => t.id === item.trainer_id);
+      const trainerInfo = getTrainer(item.trainer_id);
       return {
         ...item,
         classInfo,

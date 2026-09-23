@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { getDictionary, Locale } from '@/lib/dictionary';
 import { Instagram, Award, ArrowRight } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { TRAINERS } from '@/lib/trainers';
 
 interface PageProps {
   params: Promise<{ locale: string }>;
@@ -29,21 +30,21 @@ export default function TrainersPage(props: PageProps) {
 
   const trainerList = [
     {
-      name: 'Ümran Çaparoğlu',
+      name: TRAINERS[0].name,
       specialties: ['Reformer Pilates', 'Duo Reformer', 'Mat Pilates', 'Core Stability'],
       bio_tr: 'Ümran, uzun yıllara dayanan stüdyo reformer pilates deneyimine sahiptir. Omurga sağlığı, duruş düzeltme ve çekirdek (core) gücü geliştirme konularında uzmanlaşmıştır.',
       bio_en: 'Ümran has years of studio reformer pilates experience. She specializes in spinal health, postural correction, and core strength development.',
       instagram: 'https://www.instagram.com/umransolmaz?igsh=a2wxMGgycTRydTQ0&utm_source=qr',
-      badge: locale === 'tr' ? 'Kurucu / Eğitmen' : 'Founder / Instructor',
+      badge: locale === 'tr' ? TRAINERS[0].role_tr : TRAINERS[0].role_en,
       image: '/umran.png',
     },
     {
-      name: 'Meriç Çaparoğlu',
+      name: TRAINERS[1].name,
       specialties: ['Hatha Yoga', 'Raja Yoga', 'Pranayama', 'Meditation'],
       bio_tr: 'Meriç, Hatha Yoga ve geleneksel nefes teknikleri (Pranayama) alanında uzmanlaşmıştır. Nefes, hareket ve meditasyonu bir araya getirerek zihinsel odaklanma, içsel denge ve bütünsel iyi oluşu destekleyen seanslar düzenlemektedir.',
       bio_en: 'Meriç specializes in Hatha Yoga and traditional breathing techniques (Pranayama). He conducts sessions focusing on mental concentration and inner peace.',
       instagram: 'https://www.instagram.com/mericcaparoglu?igsh=MWdlb3BmcnZuYWF4eQ%3D%3D&utm_source=qr',
-      badge: locale === 'tr' ? 'Yoga Eğitmeni' : 'Yoga Instructor',
+      badge: locale === 'tr' ? TRAINERS[1].role_tr : TRAINERS[1].role_en,
       image: '/meric.png',
     },
   ];

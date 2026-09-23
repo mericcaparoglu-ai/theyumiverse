@@ -33,7 +33,7 @@ export default function GalleryPage(props: PageProps) {
     { id: 1, category: 'studio', label_tr: 'Reformer Odası - Modern Tasarım', label_en: 'Reformer Studio - Modern Design', img: '/post1.jpg' },
     { id: 2, category: 'studio', label_tr: 'ÜM Stüdyo Amblemi', label_en: 'ÜM Studio Emblem', img: '/post2.jpg' },
     { id: 3, category: 'studio', label_tr: 'Reformer Odası & Işıklandırma', label_en: 'Reformer Studio & Ambient Lighting', img: '/post3.jpg' },
-    { id: 4, category: 'classes', label_tr: 'Ümran Çaparoğlu ile Reformer Seansı', label_en: 'Reformer Session with Ümran Çaparoğlu', img: null },
+    { id: 4, category: 'classes', label_tr: 'Ümran Solmaz ile Reformer Seansı', label_en: 'Reformer Session with Ümran Solmaz', img: null },
     { id: 5, category: 'classes', label_tr: 'Meriç Çaparoğlu ile Hatha Yoga', label_en: 'Hatha Yoga with Meriç Çaparoğlu', img: null },
     { id: 6, category: 'events', label_tr: 'Açılış Etkinliği - Wellness Kahvaltısı', label_en: 'Opening Event - Wellness Breakfast', img: null },
   ];
