@@ -1,17 +1,27 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
+import { defaultLocale, hasLocale, locales, LOCALE_COOKIE, type Locale } from '@/lib/dictionary';
 
-const locales = ['tr', 'en'];
-const defaultLocale = 'tr';
+function getLocale(request: NextRequest): Locale {
+  // 1. An explicit choice made via the language switcher wins
+  const cookieLocale = request.cookies.get(LOCALE_COOKIE)?.value;
+  if (hasLocale(cookieLocale)) return cookieLocale;
 
-function getLocale(request: NextRequest) {
+  // 2. Otherwise use the highest-weighted supported language from Accept-Language.
+  // (A plain `includes('en')` would send e.g. "tr-TR,tr;q=0.9,en;q=0.8" to /en.)
   const acceptLanguage = request.headers.get('accept-language');
   if (!acceptLanguage) return defaultLocale;
-  
-  if (acceptLanguage.toLowerCase().includes('en')) {
-    return 'en';
-  }
-  return defaultLocale;
+
+  const preferred = acceptLanguage
+    .split(',')
+    .map((part) => {
+      const [tag, q] = part.trim().split(';q=');
+      return { lang: tag.split('-')[0].toLowerCase(), q: q ? Number(q) : 1 };
+    })
+    .sort((a, b) => b.q - a.q)
+    .find(({ lang }) => hasLocale(lang));
+
+  return (preferred?.lang as Locale) ?? defaultLocale;
 }
 
 export function proxy(request: NextRequest) {
@@ -36,8 +46,8 @@ export function proxy(request: NextRequest) {
 
   // 3. Redirect if there is no locale prefix
   const locale = getLocale(request);
-  request.nextUrl.pathname = `/${locale}${pathname}`;
-  
+  request.nextUrl.pathname = `/${locale}${pathname === '/' ? '' : pathname}`;
+
   // Return redirect response
   return NextResponse.redirect(request.nextUrl);
 }

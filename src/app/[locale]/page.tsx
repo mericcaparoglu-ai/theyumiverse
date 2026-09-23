@@ -7,6 +7,9 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Sparkles, Calendar, ArrowRight, ShieldCheck, Heart, MapPin, Instagram } from 'lucide-react';
 import { getDictionary, Locale } from '@/lib/dictionary';
 import ScheduleGrid from '@/components/schedule/ScheduleGrid';
+import WhatsappIcon from '@/components/icons/WhatsappIcon';
+import { getWhatsappUrl } from '@/lib/studio';
+import { CLASS_TYPES, getClassName } from '@/lib/classes';
 
 interface PageProps {
   params: Promise<{ locale: string }>;
@@ -59,13 +62,13 @@ export default function HomePage(props: PageProps) {
 
   const featuredClasses = [
     {
-      title: locale === 'tr' ? 'Reformer Solo & Duo' : 'Reformer Solo & Duet',
-      desc: locale === 'tr' ? 'Birebir veya düet seanslarla duruşunuzu düzeltin ve çekirdek gücünüzü artırın.' : 'Tailored solo and duet sessions to improve your posture and build core strength.',
-      tag: locale === 'tr' ? 'Solo / Düet' : 'Solo / Duet',
+      title: 'Reformer Solo & Duo',
+      desc: locale === 'tr' ? 'Birebir veya ikili seanslarla duruşunuzu düzeltin ve merkez gücünüzü artırın.' : 'Tailored private and semi-private sessions to improve your posture and build core strength.',
+      tag: locale === 'tr' ? 'Özel / İkili Ders' : 'Private / Semi-Private',
       bg: 'bg-white',
     },
     {
-      title: locale === 'tr' ? 'Reformer Grup (Maks 7)' : 'Reformer Group (Max 7)',
+      title: getClassName(CLASS_TYPES.find((c) => c.id === 'c6'), locale),
       desc: locale === 'tr' ? 'Maksimum 7 kişilik premium reformer grupları ile dinamik ve yüksek verimli antrenmanlar.' : 'Dynamic and high-energy workouts with premium reformer groups capping at max 7.',
       tag: locale === 'tr' ? 'Grup Dersi' : 'Group Class',
       bg: 'bg-sage-100/40',
@@ -103,7 +106,7 @@ export default function HomePage(props: PageProps) {
             initial={{ opacity: 0, y: 25 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
-            className="title-display text-charcoal-900 flex flex-col items-center"
+            className="title-display text-charcoal-900 flex flex-col items-center text-balance"
           >
             <span>{dict.hero.headline_1}</span>
             <span className="text-sage-500 italic">{dict.hero.headline_2}</span>
@@ -125,19 +128,25 @@ export default function HomePage(props: PageProps) {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.6 }}
-            className="flex flex-col sm:flex-row justify-center items-center gap-4 pt-4"
+            className="flex flex-col sm:flex-row justify-center items-center gap-3 pt-4"
           >
+            {/* Primary CTA */}
+            <a
+              href={getWhatsappUrl(dict.hero.whatsapp_message)}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-full sm:w-auto bg-emerald-600 hover:bg-emerald-700 text-white px-8 py-4 rounded-full text-xs uppercase tracking-widest font-semibold transition-premium shadow-lg shadow-emerald-600/20 flex items-center justify-center gap-2"
+            >
+              <WhatsappIcon className="w-4 h-4 shrink-0" />
+              <span>{dict.hero.cta_whatsapp}</span>
+            </a>
+
+            {/* Secondary CTA */}
             <Link
               href={`/${locale}/schedule`}
-              className="w-full sm:w-auto bg-charcoal-900 hover:bg-sage-500 text-sand-50 px-8 py-4 rounded-full text-xs uppercase tracking-widest font-semibold transition-premium shadow-lg shadow-charcoal-900/10 hover:shadow-sage-500/10"
+              className="w-full sm:w-auto bg-white/60 hover:bg-white border border-charcoal-900/15 hover:border-charcoal-900/30 text-charcoal-900 px-8 py-4 rounded-full text-xs uppercase tracking-widest font-semibold transition-premium text-center"
             >
               {dict.hero.cta_book}
-            </Link>
-            <Link
-              href={`/${locale}/classes`}
-              className="w-full sm:w-auto bg-white/60 hover:bg-white border border-sand-200 text-charcoal-900 px-8 py-4 rounded-full text-xs uppercase tracking-widest font-semibold transition-premium"
-            >
-              {dict.hero.cta_explore}
             </Link>
           </motion.div>
         </div>
@@ -242,13 +251,13 @@ export default function HomePage(props: PageProps) {
           {featuredClasses.map((item, idx) => (
             <div
               key={idx}
-              className={`border border-sand-200 p-8 rounded-3xl space-y-6 flex flex-col justify-between h-80 hover:shadow-md transition-premium ${item.bg}`}
+              className={`border border-sand-200 p-6 sm:p-8 rounded-3xl space-y-6 flex flex-col justify-between min-h-72 md:min-h-80 min-w-0 hover:shadow-md transition-premium ${item.bg}`}
             >
               <div className="space-y-3">
                 <span className="text-[9px] tracking-widest uppercase font-bold text-sage-700 bg-sage-50 border border-sage-100 px-3 py-1 rounded-full inline-block">
                   {item.tag}
                 </span>
-                <h3 className="text-xl font-light text-charcoal-900">{item.title}</h3>
+                <h3 className="text-lg sm:text-xl md:text-lg lg:text-xl leading-snug font-light text-charcoal-900 break-words hyphens-auto">{item.title}</h3>
                 <p className="text-xs text-charcoal-700 leading-relaxed font-light">{item.desc}</p>
               </div>
               <div>

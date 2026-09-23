@@ -2,6 +2,14 @@
 
 import Link from 'next/link';
 import { Mail, Phone, MapPin, Instagram } from 'lucide-react';
+import {
+  BRAND_NAME,
+  STUDIO_ADDRESS,
+  STUDIO_EMAIL,
+  STUDIO_MAPS_URL,
+  STUDIO_PHONE_DISPLAY,
+  STUDIO_PHONE_HREF,
+} from '@/lib/studio';
 
 interface FooterProps {
   locale: 'tr' | 'en';
@@ -15,12 +23,22 @@ interface FooterProps {
     gallery: string;
     faq: string;
     contact: string;
-    address: string;
+    studio: string;
+    program: string;
+    private_sessions: string;
+    privacy: string;
+    terms: string;
+    tagline: string;
+    copyright: string;
+    powered_by: string;
+    region: string;
+    open_in_maps: string;
   };
 }
 
 export default function Footer({ locale, dict }: FooterProps) {
   const currentYear = new Date().getFullYear();
+  const [beforeBrand, afterBrand = ''] = dict.powered_by.split('{brand}');
 
   const links = [
     { href: `/${locale}/about`, label: dict.about },
@@ -32,8 +50,8 @@ export default function Footer({ locale, dict }: FooterProps) {
   const supportLinks = [
     { href: `/${locale}/faq`, label: dict.faq },
     { href: `/${locale}/contact`, label: dict.contact },
-    { href: `/${locale}/privacy`, label: locale === 'tr' ? 'Gizlilik Politikası' : 'Privacy Policy' },
-    { href: `/${locale}/terms`, label: locale === 'tr' ? 'Kullanım Şartları' : 'Terms & Conditions' },
+    { href: `/${locale}/privacy`, label: dict.privacy },
+    { href: `/${locale}/terms`, label: dict.terms },
   ];
 
   return (
@@ -48,14 +66,12 @@ export default function Footer({ locale, dict }: FooterProps) {
             <span className="text-base tracking-[0.22em] font-light text-white transition-premium group-hover:text-sage-200">
               <span className="font-extrabold text-sage-200 text-xl tracking-normal">UM</span> PILATES & YOGA
             </span>
-            <span className="text-[7.5px] tracking-[0.45em] uppercase font-light text-sand-50/60 mt-1 transition-premium group-hover:text-sand-50/80">
-              The Yumiverse
+            <span className="text-[7.5px] tracking-[0.45em] font-light text-sand-50/60 mt-1 transition-premium group-hover:text-sand-50/80">
+              {BRAND_NAME}
             </span>
           </Link>
           <p className="text-xs leading-relaxed opacity-75 max-w-sm">
-            {locale === 'tr'
-              ? 'Arsuz ve İskenderun bölgesinde Reformer Pilates ve Yoga eğitimlerini lüks, doğayla uyumlu ve dingin bir stüdyo ortamında deneyimleyin.'
-              : 'Experience Reformer Pilates and Yoga classes in a luxury, nature-connected and serene studio environment in Arsuz and Iskenderun.'}
+            {dict.tagline}
           </p>
           <div className="flex space-x-3 pt-2">
             <a
@@ -71,7 +87,7 @@ export default function Footer({ locale, dict }: FooterProps) {
 
         {/* Studio Links */}
         <div className="space-y-4">
-          <h4 className="text-xs uppercase tracking-widest text-white font-medium">Stüdyo</h4>
+          <h4 className="text-xs uppercase tracking-widest text-white font-medium">{dict.studio}</h4>
           <ul className="space-y-2.5 text-xs">
             {links.map((link) => (
               <li key={link.href}>
@@ -85,43 +101,53 @@ export default function Footer({ locale, dict }: FooterProps) {
 
         {/* Classes */}
         <div className="space-y-4">
-          <h4 className="text-xs uppercase tracking-widest text-white font-medium">Program</h4>
+          <h4 className="text-xs uppercase tracking-widest text-white font-medium">{dict.program}</h4>
           <ul className="space-y-2.5 text-xs opacity-75">
             <li>Reformer Pilates</li>
             <li>Hatha Yoga</li>
-            <li>Özel Seanslar</li>
+            <li>{dict.private_sessions}</li>
           </ul>
         </div>
 
         {/* Contact Info */}
         <div className="space-y-4">
-          <h4 className="text-xs uppercase tracking-widest text-white font-medium">İletişim</h4>
+          <h4 className="text-xs uppercase tracking-widest text-white font-medium">{dict.contact}</h4>
           <ul className="space-y-3 text-xs opacity-75">
-            <li className="flex items-start">
-              <MapPin className="w-4 h-4 mr-2.5 text-sage-200 shrink-0 mt-0.5" />
-              <span>Hacı Bektaş-ı Veli Caddesi No: 32/A Hatay Arsuz</span>
+            <li>
+              <a
+                href={STUDIO_MAPS_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                title={dict.open_in_maps}
+                className="flex items-start hover:text-sage-200 transition-premium"
+              >
+                <MapPin className="w-4 h-4 mr-2.5 text-sage-200 shrink-0 mt-0.5" />
+                <span>{STUDIO_ADDRESS}</span>
+              </a>
             </li>
             <li className="flex items-center">
               <Phone className="w-4 h-4 mr-2.5 text-sage-200 shrink-0" />
-              <a href="tel:05340245160" className="hover:text-sage-200 transition-premium">05340245160</a>
+              <a href={STUDIO_PHONE_HREF} className="hover:text-sage-200 transition-premium whitespace-nowrap">
+                {STUDIO_PHONE_DISPLAY}
+              </a>
             </li>
             <li className="flex items-center">
               <Mail className="w-4 h-4 mr-2.5 text-sage-200 shrink-0" />
-              <a href="mailto:umpilatesyogastudyo@gmail.com" className="hover:text-sage-200 transition-premium">
-                umpilatesyogastudyo@gmail.com
+              <a href={`mailto:${STUDIO_EMAIL}`} className="hover:text-sage-200 transition-premium break-all">
+                {STUDIO_EMAIL}
               </a>
             </li>
           </ul>
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-6 pt-8 border-t border-sand-50/10 flex flex-col sm:flex-row justify-between items-center text-[10px] tracking-wider uppercase opacity-60 space-y-4 sm:space-y-0">
-        <p>© {currentYear} UM Pilates ve Yoga Studio. Powered by The Yumiverse</p>
+      <div className="max-w-7xl mx-auto px-6 pt-8 border-t border-sand-50/10 flex flex-col sm:flex-row justify-between items-center text-center sm:text-left gap-4 text-[10px] tracking-wider uppercase opacity-60">
         <p>
-          {locale === 'tr'
-            ? 'Arsuz & İskenderun Pilates ve Yoga Stüdyosu'
-            : 'Arsuz & Iskenderun Pilates & Yoga Studio'}
+          © {currentYear} {dict.copyright}. {beforeBrand}
+          <span className="normal-case">{BRAND_NAME}</span>
+          {afterBrand}
         </p>
+        <p>{dict.region}</p>
       </div>
     </footer>
   );

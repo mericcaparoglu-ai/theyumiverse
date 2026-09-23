@@ -29,8 +29,8 @@ export default function ClassesPage(props: PageProps) {
 
   const classList = [
     {
-      title_tr: 'Reformer Grup Seansı',
-      title_en: 'Reformer Group Session',
+      title_tr: 'Reformer Grup (Maks. 7 Kişi)',
+      title_en: 'Reformer Group (Max. 7)',
       slug: 'reformer-grup',
       duration: 50,
       level_tr: 'Her Seviye',
@@ -40,7 +40,7 @@ export default function ClassesPage(props: PageProps) {
       desc_en: 'Group classes for a maximum of 7 people, conducted with our 7 premium reformer equipment. Offers a dynamic and motivating community workout under trainer supervision.',
     },
     {
-      title_tr: 'Reformer Solo (Özel Seans)',
+      title_tr: 'Reformer Solo (Özel Ders)',
       title_en: 'Reformer Solo (Private)',
       slug: 'reformer-solo',
       duration: 50,
@@ -51,15 +51,15 @@ export default function ClassesPage(props: PageProps) {
       desc_en: 'One-on-one reformer pilates session tailored to your body type and fitness goals. The most effective option for spinal health, flexibility, and core strength.',
     },
     {
-      title_tr: 'Reformer Duo (Düet Seans)',
-      title_en: 'Reformer Duo (Duet)',
+      title_tr: 'Reformer Duo (İkili Ders)',
+      title_en: 'Reformer Duo (Semi-Private)',
       slug: 'reformer-duo',
       duration: 50,
       level_tr: 'Orta Seviye',
       level_en: 'Intermediate',
       category: 'reformer_pilates',
-      desc_tr: 'Arkadaşınız veya eşinizle birlikte, eğitmen gözetiminde gerçekleştireceğiniz 2 kişilik düet reformer seansı. Hem motive edici hem de yüksek verimli bir antrenman deneyimi sunar.',
-      desc_en: 'A duet reformer session for 2 people with trainer supervision. Offers a motivating and highly productive workout experience with a friend or partner.',
+      desc_tr: 'Arkadaşınız veya eşinizle birlikte, eğitmen gözetiminde gerçekleştireceğiniz 2 kişilik ikili reformer seansı. Hem motive edici hem de yüksek verimli bir antrenman deneyimi sunar.',
+      desc_en: 'A semi-private reformer session for 2 people with trainer supervision. Offers a motivating and highly productive workout experience with a friend or partner.',
     },
     {
       title_tr: 'Hatha Yoga',
@@ -99,7 +99,7 @@ export default function ClassesPage(props: PageProps) {
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: idx * 0.1 }}
-            className="bg-white border border-sand-200 p-8 rounded-3xl space-y-6 flex flex-col justify-between hover:shadow-md transition-premium"
+            className="bg-white border border-sand-200 p-6 sm:p-8 rounded-3xl space-y-6 min-w-0 flex flex-col justify-between hover:shadow-md transition-premium"
           >
             <div className="space-y-4">
               <div className="flex flex-wrap gap-2">
@@ -113,7 +113,7 @@ export default function ClassesPage(props: PageProps) {
                 </span>
               </div>
 
-              <h2 className="text-2xl font-light text-charcoal-900 leading-tight">
+              <h2 className="text-xl sm:text-2xl font-light text-charcoal-900 leading-snug break-words hyphens-auto">
                 {locale === 'tr' ? item.title_tr : item.title_en}
               </h2>
               

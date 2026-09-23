@@ -19,7 +19,8 @@
     "headline_3": "Live Better.",
     "subheadline": "The digital universe of the UM Pilates & Yoga experience: The Yumiverse. Rejuvenate your mind and body with Pilates and Yoga in Arsuz & Iskenderun.",
     "cta_book": "Class Schedule",
-    "cta_explore": "Explore Classes"
+    "cta_whatsapp": "Book via WhatsApp",
+    "whatsapp_message": "Hello, I would like to get information about UM Pilates & Yoga Studio and make a booking."
   },
   "common": {
     "login": "Login",
@@ -80,7 +81,10 @@
     "no_classes": "No classes match the selected criteria.",
     "book_now": "Book Session",
     "fully_booked": "Fully Booked",
-    "cancelled": "Class Cancelled"
+    "cancelled": "Class Cancelled",
+    "no_classes_day": "No classes on this day.",
+    "minutes_short": "min",
+    "book": "Book"
   },
   "dashboard_page": {
     "title": "Your Dashboard",
@@ -103,5 +107,18 @@
     "form_submit": "Submit",
     "whatsapp_button": "Quick WhatsApp Chat",
     "address": "Hacı Bektaş-ı Veli Caddesi No: 32/A Hatay Arsuz"
+  },
+  "footer": {
+    "studio": "Studio",
+    "program": "Programs",
+    "contact": "Contact",
+    "private_sessions": "Private Sessions",
+    "privacy": "Privacy Policy",
+    "terms": "Terms & Conditions",
+    "tagline": "Experience Reformer Pilates and Yoga classes in a luxury, nature-connected and serene studio environment in Arsuz and Iskenderun.",
+    "copyright": "UM Pilates & Yoga Studio",
+    "powered_by": "Powered by {brand}",
+    "region": "Arsuz & Iskenderun Pilates & Yoga Studio",
+    "open_in_maps": "Open location in Google Maps"
   }
 }

@@ -1,8 +1,10 @@
 'use client';
 
 import { useState, useMemo } from 'react';
-import { Calendar, User, Clock, CheckCircle2, AlertCircle } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { User, Clock, ArrowRight } from 'lucide-react';
+import { motion } from 'framer-motion';
+import { CLASS_TYPES, getClassName } from '@/lib/classes';
+import { getWhatsappUrl } from '@/lib/studio';
 
 interface ScheduleGridProps {
   locale: 'tr' | 'en';
@@ -14,15 +16,6 @@ interface ScheduleGridProps {
 // Structured Mock Data for premium display
 const MOCK_TRAINERS = [
   { id: 't1', name: 'Ümran Çaparoğlu', slug: 'umran-caparoglu' },
-];
-
-const MOCK_CLASS_TYPES = [
-  { id: 'c6', name_tr: 'Reformer Grup (Maks 7 Kişi)', name_en: 'Reformer Group (Max 7)', category: 'reformer_pilates', level: 'all_levels', duration: 50 },
-  { id: 'c1', name_tr: 'Reformer Solo (Özel)', name_en: 'Reformer Solo (Private)', category: 'reformer_pilates', level: 'all_levels', duration: 50 },
-  { id: 'c2', name_tr: 'Reformer Duo (Düet)', name_en: 'Reformer Duo (Duet)', category: 'reformer_pilates', level: 'intermediate', duration: 50 },
-  { id: 'c3', name_tr: 'Vinyasa Flow Yoga', name_en: 'Vinyasa Flow Yoga', category: 'yoga', level: 'all_levels', duration: 60 },
-  { id: 'c4', name_tr: 'Yin Yoga & Ses Çanakları', name_en: 'Yin Yoga & Sound Healing', category: 'yoga', level: 'beginner', duration: 75 },
-  { id: 'c5', name_tr: 'Core Reformer', name_en: 'Core Reformer', category: 'reformer_pilates', level: 'advanced', duration: 50 },
 ];
 
 const MOCK_SCHEDULE = [
@@ -83,45 +76,60 @@ const MOCK_SCHEDULE = [
 ];
 
 const DAYS_OF_WEEK_TR = [
-  { id: 1, name: 'Pazartesi' },
-  { id: 2, name: 'Salı' },
-  { id: 3, name: 'Çarşamba' },
-  { id: 4, name: 'Perşembe' },
-  { id: 5, name: 'Cuma' },
-  { id: 6, name: 'Cumartesi' },
-  { id: 7, name: 'Pazar' },
+  { id: 1, name: 'Pazartesi', short: 'Pzt' },
+  { id: 2, name: 'Salı', short: 'Sal' },
+  { id: 3, name: 'Çarşamba', short: 'Çar' },
+  { id: 4, name: 'Perşembe', short: 'Per' },
+  { id: 5, name: 'Cuma', short: 'Cum' },
+  { id: 6, name: 'Cumartesi', short: 'Cmt' },
+  { id: 7, name: 'Pazar', short: 'Paz' },
 ];
 
 const DAYS_OF_WEEK_EN = [
-  { id: 1, name: 'Monday' },
-  { id: 2, name: 'Tuesday' },
-  { id: 3, name: 'Wednesday' },
-  { id: 4, name: 'Thursday' },
-  { id: 5, name: 'Friday' },
-  { id: 6, name: 'Saturday' },
-  { id: 7, name: 'Sunday' },
+  { id: 1, name: 'Monday', short: 'Mon' },
+  { id: 2, name: 'Tuesday', short: 'Tue' },
+  { id: 3, name: 'Wednesday', short: 'Wed' },
+  { id: 4, name: 'Thursday', short: 'Thu' },
+  { id: 5, name: 'Friday', short: 'Fri' },
+  { id: 6, name: 'Saturday', short: 'Sat' },
+  { id: 7, name: 'Sunday', short: 'Sun' },
 ];
+
+// JS: 0 = Sunday … 6 = Saturday  ->  schedule: 1 = Monday … 7 = Sunday
+const getTodayId = () => new Date().getDay() || 7;
+
+const selectClassName =
+  'w-full sm:w-auto text-[11px] sm:text-xs tracking-normal sm:tracking-wider sm:uppercase font-medium bg-sand-50/80 border border-sand-200 rounded-full pl-3 pr-2 sm:px-4 py-2.5 outline-none focus:border-sage-500 transition-premium cursor-pointer';
 
 export default function ScheduleGrid({
   locale,
   dict,
-  onBookClass,
-  isAuthenticated,
 }: ScheduleGridProps) {
   const days = locale === 'tr' ? DAYS_OF_WEEK_TR : DAYS_OF_WEEK_EN;
+  const minutesShort = dict.schedule_page?.minutes_short || (locale === 'tr' ? 'dk' : 'min');
 
   // Filters State
   const [selectedTrainer, setSelectedTrainer] = useState('all');
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [selectedLevel, setSelectedLevel] = useState('all');
-  
-  // Mobile Day Selector State
-  const [activeDayMobile, setActiveDayMobile] = useState(1);
+
+  // Mobile Day Tabs State (defaults to today)
+  const [activeDayMobile, setActiveDayMobile] = useState(getTodayId);
+
+  // Only offer a trainer filter when there is actually something to choose between
+  const scheduledTrainers = useMemo(
+    () => MOCK_TRAINERS.filter((t) => MOCK_SCHEDULE.some((s) => s.trainer_id === t.id)),
+    []
+  );
+  const showTrainerFilter = scheduledTrainers.length > 1;
+
+  const hasActiveFilters =
+    selectedTrainer !== 'all' || selectedCategory !== 'all' || selectedLevel !== 'all';
 
   // Filtered Sessions
   const filteredSchedule = useMemo(() => {
     return MOCK_SCHEDULE.map((item) => {
-      const classInfo = MOCK_CLASS_TYPES.find((c) => c.id === item.class_id);
+      const classInfo = CLASS_TYPES.find((c) => c.id === item.class_id);
       const trainerInfo = MOCK_TRAINERS.find((t) => t.id === item.trainer_id);
       return {
         ...item,
@@ -136,9 +144,9 @@ export default function ScheduleGrid({
     });
   }, [selectedTrainer, selectedCategory, selectedLevel]);
 
-  // Group Schedule by day for desktop
+  // Group Schedule by day
   const scheduleByDay = useMemo(() => {
-    const grouped: { [key: number]: any[] } = { 1: [], 2: [], 3: [], 4: [], 5: [], 6: [], 7: [] };
+    const grouped: { [key: number]: typeof filteredSchedule } = { 1: [], 2: [], 3: [], 4: [], 5: [], 6: [], 7: [] };
     filteredSchedule.forEach((item) => {
       if (grouped[item.day]) {
         grouped[item.day].push(item);
@@ -151,64 +159,70 @@ export default function ScheduleGrid({
     return grouped;
   }, [filteredSchedule]);
 
-  const getWhatsappUrl = (item: any) => {
-    const classTitle = locale === 'tr' ? item.classInfo?.name_tr : item.classInfo?.name_en;
+  const getBookingUrl = (item: (typeof filteredSchedule)[number]) => {
+    const classTitle = getClassName(item.classInfo, locale);
     const dayName = days.find((d) => d.id === item.day)?.name || '';
     const text = locale === 'tr'
       ? `Merhaba Üm Pilates Yoga Studio! ${dayName} günü saat ${item.time}'daki "${classTitle}" dersi için rezervasyon yaptırmak istiyorum.`
       : `Hello THEYUMIVERSE! I want to book a spot for the "${classTitle}" class on ${dayName} at ${item.time}.`;
-    return `https://wa.me/905340245160?text=${encodeURIComponent(text)}`;
+    return getWhatsappUrl(text);
   };
+
+  const emptyText = hasActiveFilters
+    ? dict.schedule_page?.no_classes
+    : dict.schedule_page?.no_classes_day || (locale === 'tr' ? 'Ders yok' : 'No classes');
 
   return (
     <div className="w-full space-y-8">
       {/* 1. Timetable Filter Toolbar */}
-      <div className="flex flex-wrap gap-4 items-center justify-between bg-white/40 p-5 rounded-3xl border border-white/50 backdrop-blur-md">
-        <div className="flex flex-wrap gap-4">
-          {/* Trainer Filter */}
-          <div className="flex flex-col space-y-1">
-            <span className="text-[10px] tracking-widest uppercase opacity-60 font-semibold px-1">
-              {locale === 'tr' ? 'EĞİTMEN' : 'TRAINER'}
-            </span>
-            <select
-              value={selectedTrainer}
-              onChange={(e) => setSelectedTrainer(e.target.value)}
-              className="text-xs tracking-wider uppercase font-medium bg-sand-50/80 border border-sand-200 rounded-full px-4 py-2.5 outline-none focus:border-sage-500 transition-premium cursor-pointer"
-            >
-              <option value="all">{dict.schedule_page?.filters?.all_trainers || 'All Trainers'}</option>
-              {MOCK_TRAINERS.map((t) => (
-                <option key={t.id} value={t.id}>
-                  {t.name}
-                </option>
-              ))}
-            </select>
-          </div>
+      <div className="flex flex-wrap gap-4 items-end justify-between bg-white/40 p-5 rounded-3xl border border-white/50 backdrop-blur-md">
+        <div className="grid grid-cols-2 sm:flex sm:flex-wrap gap-4 w-full sm:w-auto">
+          {/* Trainer Filter (only when >1 trainer) */}
+          {showTrainerFilter && (
+            <label className="flex flex-col space-y-1 min-w-0">
+              <span className="text-[10px] tracking-widest uppercase opacity-60 font-semibold px-1">
+                {locale === 'tr' ? 'EĞİTMEN' : 'TRAINER'}
+              </span>
+              <select
+                value={selectedTrainer}
+                onChange={(e) => setSelectedTrainer(e.target.value)}
+                className={selectClassName}
+              >
+                <option value="all">{dict.schedule_page?.filters?.all_trainers || 'All Trainers'}</option>
+                {scheduledTrainers.map((t) => (
+                  <option key={t.id} value={t.id}>
+                    {t.name}
+                  </option>
+                ))}
+              </select>
+            </label>
+          )}
 
           {/* Class Category Filter */}
-          <div className="flex flex-col space-y-1">
+          <label className="flex flex-col space-y-1 min-w-0">
             <span className="text-[10px] tracking-widest uppercase opacity-60 font-semibold px-1">
               {locale === 'tr' ? 'DERS TİPİ' : 'CLASS TYPE'}
             </span>
             <select
               value={selectedCategory}
               onChange={(e) => setSelectedCategory(e.target.value)}
-              className="text-xs tracking-wider uppercase font-medium bg-sand-50/80 border border-sand-200 rounded-full px-4 py-2.5 outline-none focus:border-sage-500 transition-premium cursor-pointer"
+              className={selectClassName}
             >
               <option value="all">{dict.schedule_page?.filters?.all_classes || 'All Class Types'}</option>
               <option value="reformer_pilates">Reformer Pilates</option>
               <option value="yoga">Yoga</option>
             </select>
-          </div>
+          </label>
 
           {/* Level Filter */}
-          <div className="flex flex-col space-y-1">
+          <label className="flex flex-col space-y-1 min-w-0">
             <span className="text-[10px] tracking-widest uppercase opacity-60 font-semibold px-1">
               {locale === 'tr' ? 'SEVİYE' : 'LEVEL'}
             </span>
             <select
               value={selectedLevel}
               onChange={(e) => setSelectedLevel(e.target.value)}
-              className="text-xs tracking-wider uppercase font-medium bg-sand-50/80 border border-sand-200 rounded-full px-4 py-2.5 outline-none focus:border-sage-500 transition-premium cursor-pointer"
+              className={selectClassName}
             >
               <option value="all">{dict.schedule_page?.filters?.all_levels || 'All Levels'}</option>
               <option value="beginner">{dict.common?.beginner || 'Beginner'}</option>
@@ -216,145 +230,132 @@ export default function ScheduleGrid({
               <option value="advanced">{dict.common?.advanced || 'Advanced'}</option>
               <option value="all_levels">{dict.common?.all_levels || 'All Levels'}</option>
             </select>
-          </div>
+          </label>
         </div>
 
         {/* Clear Filters indicator */}
-        {(selectedTrainer !== 'all' || selectedCategory !== 'all' || selectedLevel !== 'all') && (
+        {hasActiveFilters && (
           <button
             onClick={() => {
               setSelectedTrainer('all');
               setSelectedCategory('all');
               setSelectedLevel('all');
             }}
-            className="text-[10px] tracking-widest uppercase text-sage-700 hover:text-sage-500 font-semibold transition-premium pt-4 lg:pt-0 cursor-pointer"
+            className="text-[10px] tracking-widest uppercase text-sage-700 hover:text-sage-500 font-semibold transition-premium py-2 cursor-pointer"
           >
             {locale === 'tr' ? 'Filtreleri Temizle' : 'Clear Filters'}
           </button>
         )}
       </div>
 
-      {/* 2. Mobile Day Carousel (Visible on mobile, hidden on desktop) */}
-      <div className="block lg:hidden overflow-x-auto pb-2 scrollbar-none">
-        <div className="flex space-x-2">
-          {days.map((day) => (
-            <button
-              key={day.id}
-              onClick={() => setActiveDayMobile(day.id)}
-              className={`flex-shrink-0 text-xs uppercase tracking-wider px-5 py-3 rounded-full border transition-premium ${
-                activeDayMobile === day.id
-                  ? 'bg-charcoal-900 text-white border-charcoal-900 shadow-md'
-                  : 'bg-white/60 border-sand-200 text-charcoal-900'
-              }`}
-            >
-              {day.name}
-            </button>
-          ))}
+      {/* 2. Mobile Day Tabs (hidden on desktop) */}
+      <div
+        role="tablist"
+        aria-label={dict.schedule_page?.title}
+        className="lg:hidden overflow-x-auto scrollbar-none snap-x"
+      >
+        <div className="flex gap-1.5">
+          {days.map((day) => {
+            const isActive = activeDayMobile === day.id;
+            const count = scheduleByDay[day.id]?.length ?? 0;
+            return (
+              <button
+                key={day.id}
+                role="tab"
+                id={`day-tab-${day.id}`}
+                aria-selected={isActive}
+                aria-controls={`day-panel-${day.id}`}
+                onClick={() => setActiveDayMobile(day.id)}
+                className={`snap-start flex-1 min-w-10 flex flex-col items-center gap-1 px-1.5 py-2.5 rounded-2xl border text-xs uppercase tracking-wider font-semibold transition-premium cursor-pointer ${
+                  isActive
+                    ? 'bg-charcoal-900 text-white border-charcoal-900 shadow-md'
+                    : 'bg-white/60 border-sand-200 text-charcoal-900'
+                } ${count === 0 && !isActive ? 'opacity-50' : ''}`}
+              >
+                <span>{day.short}</span>
+                <span
+                  aria-hidden="true"
+                  className={`w-1 h-1 rounded-full ${count > 0 ? (isActive ? 'bg-sage-200' : 'bg-sage-500') : 'bg-transparent'}`}
+                />
+              </button>
+            );
+          })}
         </div>
       </div>
 
-      {/* 3. Timetable Grid Layout */}
-      {/* Desktop Version */}
-      <div className="hidden lg:grid grid-cols-7 gap-4 min-h-[500px]">
+      {/* 3. Timetable — one DOM tree for all breakpoints:
+          desktop shows all 7 columns, mobile shows only the active day's panel. */}
+      <div className="lg:grid lg:grid-cols-7 lg:gap-3 xl:gap-4 lg:min-h-[500px]">
         {days.map((day) => {
           const items = scheduleByDay[day.id] || [];
+          const isActive = activeDayMobile === day.id;
           return (
-            <div key={day.id} className="space-y-4">
-              {/* Day Header */}
-              <div className="text-center py-3 bg-charcoal-900 rounded-2xl shadow-sm text-sand-50">
-                <span className="text-xs uppercase tracking-widest font-semibold block">
-                  {day.name}
+            <section
+              key={day.id}
+              id={`day-panel-${day.id}`}
+              role="tabpanel"
+              aria-labelledby={`day-tab-${day.id}`}
+              className={`${isActive ? 'block' : 'hidden'} lg:block space-y-4 min-w-0`}
+            >
+              {/* Day Header — full-width card on desktop, compact caption on mobile */}
+              <h3 className="lg:text-center lg:py-3 lg:bg-charcoal-900 lg:rounded-2xl lg:shadow-sm lg:text-sand-50 text-charcoal-900">
+                <span className="text-xs uppercase tracking-widest font-semibold">{day.name}</span>
+                <span className="lg:hidden text-[10px] tracking-wider text-charcoal-500 ml-2">
+                  · {items.length} {dict.common?.sessions || (locale === 'tr' ? 'ders' : 'classes')}
                 </span>
-              </div>
+              </h3>
 
               {/* Class Cards */}
               <div className="space-y-3">
                 {items.length > 0 ? (
-                  items.map((item) => {
-                    const isFull = item.booked >= item.capacity;
-                    return (
-                      <motion.div
-                        key={item.id}
-                        initial={{ opacity: 0, y: 10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        className="p-4 rounded-2xl border border-sand-200 bg-white hover:shadow-md hover:border-sage-500 transition-premium flex flex-col justify-center h-32 group relative"
-                      >
-                        <div className="space-y-2">
-                          {/* Time tag */}
-                          <div className="flex items-center text-[10px] tracking-widest text-charcoal-500 font-semibold uppercase">
-                            <Clock className="w-3.5 h-3.5 mr-1 text-sage-500" />
-                            {item.time} ({item.classInfo?.duration} dk)
-                          </div>
-                          
-                          {/* Title */}
-                          <h4 className="text-xs font-semibold leading-tight text-charcoal-900">
-                            {locale === 'tr' ? item.classInfo?.name_tr : item.classInfo?.name_en}
-                          </h4>
-
-                          {/* Trainer */}
-                          <div className="flex items-center text-[10px] text-charcoal-500 italic">
-                            <User className="w-3.5 h-3.5 mr-1 opacity-70" />
-                            {item.trainerInfo?.name}
-                          </div>
+                  items.map((item) => (
+                    <motion.a
+                      key={item.id}
+                      href={getBookingUrl(item)}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      className="group p-5 lg:p-3.5 xl:p-4 rounded-3xl lg:rounded-2xl border border-sand-200 bg-white shadow-sm lg:shadow-none hover:shadow-md hover:border-sage-500 transition-premium flex items-center lg:items-start justify-between gap-3 lg:min-h-32 min-w-0"
+                    >
+                      <div className="space-y-1.5 lg:space-y-2 min-w-0">
+                        {/* Time tag */}
+                        <div className="flex flex-wrap items-center text-[10px] tracking-wider lg:tracking-widest text-charcoal-500 font-semibold uppercase">
+                          <Clock className="w-3.5 h-3.5 mr-1 text-sage-500 shrink-0" />
+                          <span>{item.time}</span>
+                          <span className="ml-1 font-medium opacity-80">
+                            ({item.classInfo?.duration} {minutesShort})
+                          </span>
                         </div>
-                      </motion.div>
-                    );
-                  })
+
+                        {/* Title */}
+                        <h4 className="text-sm lg:text-xs xl:text-[13px] font-semibold leading-snug text-charcoal-900 break-words hyphens-auto">
+                          {getClassName(item.classInfo, locale)}
+                        </h4>
+
+                        {/* Trainer */}
+                        <div className="flex items-center text-[10px] text-charcoal-500 italic min-w-0">
+                          <User className="w-3 h-3 lg:w-3.5 lg:h-3.5 mr-1 opacity-70 shrink-0" />
+                          <span className="truncate">{item.trainerInfo?.name}</span>
+                        </div>
+                      </div>
+
+                      {/* Mobile booking affordance */}
+                      <span className="lg:hidden shrink-0 flex items-center gap-1 text-[10px] uppercase tracking-widest font-semibold text-emerald-700">
+                        {dict.schedule_page?.book || (locale === 'tr' ? 'Rezervasyon' : 'Book')}
+                        <ArrowRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-0.5" />
+                      </span>
+                    </motion.a>
+                  ))
                 ) : (
-                  <div className="py-8 text-center text-[10px] tracking-wider text-charcoal-500 italic opacity-60">
-                    {locale === 'tr' ? 'Ders yok' : 'No classes'}
+                  <div className="py-16 lg:py-8 text-center text-xs lg:text-[10px] tracking-wider text-charcoal-500 italic opacity-60 bg-white/20 lg:bg-transparent rounded-3xl border border-dashed border-sand-200 lg:border-0">
+                    {emptyText}
                   </div>
                 )}
               </div>
-            </div>
+            </section>
           );
         })}
-      </div>
-
-      {/* Mobile Version */}
-      <div className="block lg:hidden space-y-4">
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={activeDayMobile}
-            initial={{ opacity: 0, x: 10 }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: -10 }}
-            transition={{ duration: 0.2 }}
-            className="space-y-4"
-          >
-            {scheduleByDay[activeDayMobile]?.length > 0 ? (
-              scheduleByDay[activeDayMobile].map((item) => {
-                const isFull = item.booked >= item.capacity;
-                return (
-                  <div
-                    key={item.id}
-                    className="p-5 rounded-3xl border border-sand-200 bg-white shadow-sm flex items-center justify-between gap-4"
-                  >
-                    <div className="space-y-1.5">
-                      <div className="flex items-center text-[10px] font-semibold tracking-wider text-charcoal-500 uppercase">
-                        <Clock className="w-3.5 h-3.5 mr-1 text-sage-500" />
-                        {item.time} ({item.classInfo?.duration} dk)
-                      </div>
-                      <h4 className="text-sm font-semibold text-charcoal-900 leading-tight">
-                        {locale === 'tr' ? item.classInfo?.name_tr : item.classInfo?.name_en}
-                      </h4>
-                      <div className="flex items-center space-x-4 text-[10px] text-charcoal-500">
-                        <span className="italic flex items-center">
-                          <User className="w-3 h-3 mr-1 opacity-70" />
-                          {item.trainerInfo?.name}
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                );
-              })
-            ) : (
-              <div className="py-16 text-center text-xs tracking-wider text-charcoal-500 italic opacity-60 bg-white/20 rounded-3xl border border-dashed border-sand-200">
-                {dict.schedule_page?.no_classes || 'No classes scheduled for today.'}
-              </div>
-            )}
-          </motion.div>
-        </AnimatePresence>
       </div>
 
       {/* Contact & Inquiry Banner */}
@@ -366,9 +367,9 @@ export default function ScheduleGrid({
         </p>
         <div className="flex justify-center gap-4 flex-wrap pt-2">
           <a
-            href={`https://wa.me/905340245160?text=${encodeURIComponent(locale === 'tr' ? 'Merhaba Üm Pilates Yoga Studio! Ders programınızı inceledim ve seanslar hakkında bilgi/kontenjan durumu almak istiyorum.' : 'Hello THEYUMIVERSE! I reviewed your schedule and would like to get information about classes.')}`}
+            href={getWhatsappUrl(locale === 'tr' ? 'Merhaba Üm Pilates Yoga Studio! Ders programınızı inceledim ve seanslar hakkında bilgi/kontenjan durumu almak istiyorum.' : 'Hello THEYUMIVERSE! I reviewed your schedule and would like to get information about classes.')}
             target="_blank"
-            rel="noreferrer"
+            rel="noopener noreferrer"
             className="flex items-center text-xs tracking-wider uppercase font-medium bg-emerald-600 hover:bg-emerald-700 text-white px-6 py-2.5 rounded-full transition-premium shadow-md shadow-emerald-600/10 cursor-pointer"
           >
             {locale === 'tr' ? 'WhatsApp ile Yazın' : 'Chat via WhatsApp'}

@@ -14,12 +14,13 @@
     "admin": "Yönetici"
   },
   "hero": {
-    "headline_1": "Move Better.",
-    "headline_2": "Feel Better.",
-    "headline_3": "Live Better.",
+    "headline_1": "Daha İyi Hareket Et.",
+    "headline_2": "Daha İyi Hisset.",
+    "headline_3": "Daha İyi Yaşa.",
     "subheadline": "UM Pilates ve Yoga deneyiminin dijital evreni: The Yumiverse. Pilates ve Yoga ile zihninizi ve bedeninizi yenileyin. Arsuz ve İskenderun'da lüks ve huzurlu bir wellness deneyimi.",
     "cta_book": "Ders Programı",
-    "cta_explore": "Dersleri Keşfet"
+    "cta_whatsapp": "WhatsApp ile Rezervasyon",
+    "whatsapp_message": "Merhaba, UM Pilates & Yoga Stüdyosu hakkında bilgi almak ve rezervasyon yaptırmak istiyorum."
   },
   "common": {
     "login": "Giriş Yap",
@@ -80,7 +81,10 @@
     "no_classes": "Seçilen filtrelerde ders bulunmamaktadır.",
     "book_now": "Hemen Rezervasyon Yap",
     "fully_booked": "Kontenjan Dolu",
-    "cancelled": "Ders İptal Edildi"
+    "cancelled": "Ders İptal Edildi",
+    "no_classes_day": "Bu gün ders bulunmuyor.",
+    "minutes_short": "dk",
+    "book": "Rezervasyon"
   },
   "dashboard_page": {
     "title": "Kişisel Paneliniz",
@@ -103,5 +107,18 @@
     "form_submit": "Gönder",
     "whatsapp_button": "Hızlı WhatsApp İletişimi",
     "address": "Hacı Bektaş-ı Veli Caddesi No: 32/A Hatay Arsuz"
+  },
+  "footer": {
+    "studio": "Stüdyo",
+    "program": "Program",
+    "contact": "İletişim",
+    "private_sessions": "Özel Seanslar",
+    "privacy": "Gizlilik Politikası",
+    "terms": "Kullanım Şartları",
+    "tagline": "Arsuz ve İskenderun bölgesinde Reformer Pilates ve Yoga eğitimlerini lüks, doğayla uyumlu ve dingin bir stüdyo ortamında deneyimleyin.",
+    "copyright": "UM Pilates & Yoga Stüdyosu",
+    "powered_by": "{brand} tarafından desteklenmektedir",
+    "region": "Arsuz & İskenderun Pilates ve Yoga Stüdyosu",
+    "open_in_maps": "Konumu Google Haritalar’da aç"
   }
 }

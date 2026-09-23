@@ -75,13 +75,13 @@ export default function PricingPage(props: PageProps) {
       href: `https://wa.me/905340245160?text=${encodeURIComponent(locale === 'tr' ? 'Merhaba Üm Pilates Yoga Studio! 12 seanslık Reformer paketiniz (5500₺) hakkında bilgi almak ve satın almak istiyorum.' : 'Hello THEYUMIVERSE! I would like to purchase the 12-Session Reformer pack (5500 TRY).')}`,
     },
     {
-      title: locale === 'tr' ? 'Solo Reformer (10 Ders)' : 'Solo Reformer (10 Sessions)',
+      title: locale === 'tr' ? 'Reformer Solo (10 Ders)' : 'Reformer Solo (10 Sessions)',
       price: '15.000',
       period: locale === 'tr' ? 'Aylık' : 'Monthly',
       sessions: 10,
       validity: locale === 'tr' ? '30 Gün Geçerli' : '30 Days Validity',
       features: [
-        locale === 'tr' ? '10 Solo Reformer Pilates Dersi' : '10 Solo Reformer Pilates classes',
+        locale === 'tr' ? '10 Reformer Solo Pilates Dersi' : '10 Reformer Solo Pilates classes',
         locale === 'tr' ? 'Kişiye özel birebir eğitmen rehberliği' : 'Private instructor guidance',
         locale === 'tr' ? 'Takvim entegrasyon desteği' : 'Calendar support',
         locale === 'tr' ? '12 saat öncesine kadar ücretsiz iptal' : 'Free cancel up to 12h',
@@ -91,13 +91,13 @@ export default function PricingPage(props: PageProps) {
       href: `https://wa.me/905340245160?text=${encodeURIComponent(locale === 'tr' ? 'Merhaba Üm Pilates Yoga Studio! Aylık 10 derslik Solo Reformer paketiniz (15.000₺) hakkında bilgi almak ve satın almak istiyorum.' : 'Hello THEYUMIVERSE! I would like to purchase the Solo Reformer monthly 10-session pack (15,000 TRY).')}`,
     },
     {
-      title: locale === 'tr' ? 'Duo Reformer (8 Seans)' : 'Duo Reformer (8 Sessions)',
+      title: locale === 'tr' ? 'Reformer Duo (8 Seans)' : 'Reformer Duo (8 Sessions)',
       price: '15.000',
       period: locale === 'tr' ? 'Aylık' : 'Monthly',
       sessions: 8,
       validity: locale === 'tr' ? '30 Gün Geçerli' : '30 Days Validity',
       features: [
-        locale === 'tr' ? '8 Duo Reformer Pilates Dersi (Düet)' : '8 Duo Reformer Pilates classes (Duet)',
+        locale === 'tr' ? '8 Reformer Duo Pilates Dersi (İkili)' : '8 Reformer Duo Pilates classes (Semi-Private)',
         locale === 'tr' ? 'Eğitmen gözetiminde eşli antrenman' : 'Trainer supervised partner workout',
         locale === 'tr' ? 'Takvim entegrasyon desteği' : 'Calendar support',
         locale === 'tr' ? '12 saat öncesine kadar ücretsiz iptal' : 'Free cancel up to 12h',

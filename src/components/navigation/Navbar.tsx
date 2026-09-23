@@ -2,9 +2,11 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { usePathname, useRouter } from 'next/navigation';
-import { Menu, X, Globe, User } from 'lucide-react';
+import { usePathname } from 'next/navigation';
+import { Menu, X, User } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import LanguageSwitcher from './LanguageSwitcher';
+import { BRAND_NAME } from '@/lib/studio';
 
 interface NavbarProps {
   locale: 'tr' | 'en';
@@ -23,7 +25,6 @@ interface NavbarProps {
 
 export default function Navbar({ locale, dict }: NavbarProps) {
   const pathname = usePathname();
-  const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
 
@@ -50,14 +51,6 @@ export default function Navbar({ locale, dict }: NavbarProps) {
     { href: `/${locale}/contact`, label: dict.contact },
   ];
 
-  const switchLanguage = () => {
-    const nextLocale = locale === 'tr' ? 'en' : 'tr';
-    const pathSegments = pathname.split('/');
-    pathSegments[1] = nextLocale;
-    const newPath = pathSegments.join('/');
-    router.push(newPath);
-  };
-
   const isActive = (href: string) => {
     if (href === `/${locale}`) {
       return pathname === href;
@@ -81,8 +74,8 @@ export default function Navbar({ locale, dict }: NavbarProps) {
             <span className="text-base tracking-[0.22em] font-light text-charcoal-900 transition-premium group-hover:text-sage-500">
               <span className="font-extrabold text-sage-500 text-xl tracking-normal">UM</span> PILATES & YOGA
             </span>
-            <span className="text-[7.5px] tracking-[0.45em] uppercase font-light text-charcoal-500 mt-1 transition-premium group-hover:text-charcoal-700">
-              The Yumiverse
+            <span className="text-[7.5px] tracking-[0.45em] font-light text-charcoal-500 mt-1 transition-premium group-hover:text-charcoal-700">
+              {BRAND_NAME}
             </span>
           </Link>
 
@@ -111,13 +104,7 @@ export default function Navbar({ locale, dict }: NavbarProps) {
           {/* Right Actions */}
           <div className="hidden lg:flex items-center space-x-6">
             {/* Language switch */}
-            <button
-              onClick={switchLanguage}
-              className="flex items-center text-xs tracking-wider uppercase font-medium text-charcoal-900 opacity-70 hover:opacity-100 transition-premium cursor-pointer"
-            >
-              <Globe className="w-3.5 h-3.5 mr-1" />
-              {locale === 'tr' ? 'EN' : 'TR'}
-            </button>
+            <LanguageSwitcher locale={locale} />
 
             {/* Contact CTA */}
             <Link
@@ -130,13 +117,7 @@ export default function Navbar({ locale, dict }: NavbarProps) {
 
           {/* Mobile Menu Trigger */}
           <div className="flex lg:hidden items-center space-x-4">
-            <button
-              onClick={switchLanguage}
-              className="flex items-center text-xs tracking-wider uppercase font-medium text-charcoal-900 opacity-70 hover:opacity-100 transition-premium cursor-pointer"
-            >
-              <Globe className="w-3.5 h-3.5 mr-1" />
-              {locale === 'tr' ? 'EN' : 'TR'}
-            </button>
+            <LanguageSwitcher locale={locale} onNavigate={() => setIsOpen(false)} />
             <button
               onClick={() => setIsOpen(!isOpen)}
               className="text-charcoal-900 hover:text-sage-500 transition-premium cursor-pointer"

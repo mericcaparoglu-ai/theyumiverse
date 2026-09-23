@@ -4,6 +4,13 @@ import { use, useState } from 'react';
 import { getDictionary, Locale } from '@/lib/dictionary';
 import { Mail, Phone, MapPin, MessageSquare, Check, Send } from 'lucide-react';
 import { motion } from 'framer-motion';
+import {
+  getWhatsappUrl,
+  STUDIO_EMAIL,
+  STUDIO_MAPS_URL,
+  STUDIO_PHONE_DISPLAY,
+  STUDIO_PHONE_HREF,
+} from '@/lib/studio';
 
 interface PageProps {
   params: Promise<{ locale: string }>;
@@ -48,7 +55,7 @@ export default function ContactPage(props: PageProps) {
     ? 'Merhaba Üm Pilates Yoga Studio! Reformer Pilates ve Yoga ders paketleriniz, seans programlarınız ve stüdyo kayıt şartlarınız hakkında bilgi alabilir miyim?'
     : 'Hello THEYUMIVERSE! Could I please get details about your Reformer Pilates and Yoga packages, timetable options, and studio enrollment?';
 
-  const whatsappLink = `https://wa.me/905340245160?text=${encodeURIComponent(whatsappText)}`;
+  const whatsappLink = getWhatsappUrl(whatsappText);
 
   return (
     <div className="py-16 md:py-24 max-w-7xl mx-auto px-6 space-y-16">
@@ -166,21 +173,38 @@ export default function ContactPage(props: PageProps) {
                 <MapPin className="w-5 h-5 mr-3 text-sage-500 shrink-0 mt-0.5" />
                 <div>
                   <span className="font-semibold block">{locale === 'tr' ? 'Adresimiz' : 'Address'}</span>
-                  <span className="opacity-80">{dict.contact_page.address}</span>
+                  <a
+                    href={STUDIO_MAPS_URL}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="opacity-80 hover:opacity-100 hover:text-sage-700 underline decoration-sand-300 underline-offset-4 transition-premium"
+                  >
+                    {dict.contact_page.address}
+                  </a>
                 </div>
               </li>
               <li className="flex items-start">
                 <Phone className="w-5 h-5 mr-3 text-sage-500 shrink-0 mt-0.5" />
                 <div>
                   <span className="font-semibold block">{locale === 'tr' ? 'Telefon & WhatsApp' : 'Phone & WhatsApp'}</span>
-                  <span className="opacity-80">+90 (534) 024 51 60</span>
+                  <a
+                    href={STUDIO_PHONE_HREF}
+                    className="opacity-80 hover:opacity-100 hover:text-sage-700 transition-premium whitespace-nowrap"
+                  >
+                    {STUDIO_PHONE_DISPLAY}
+                  </a>
                 </div>
               </li>
               <li className="flex items-start">
                 <Mail className="w-5 h-5 mr-3 text-sage-500 shrink-0 mt-0.5" />
                 <div>
                   <span className="font-semibold block">E-posta</span>
-                  <span className="opacity-80">umpilatesyogastudyo@gmail.com</span>
+                  <a
+                    href={`mailto:${STUDIO_EMAIL}`}
+                    className="opacity-80 hover:opacity-100 hover:text-sage-700 transition-premium break-all"
+                  >
+                    {STUDIO_EMAIL}
+                  </a>
                 </div>
               </li>
             </ul>

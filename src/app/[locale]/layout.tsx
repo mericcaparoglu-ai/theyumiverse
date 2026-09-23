@@ -1,8 +1,11 @@
 import type { Metadata } from 'next';
 import { Playfair_Display, Inter } from 'next/font/google';
-import { getDictionary, Locale } from '@/lib/dictionary';
+import { notFound } from 'next/navigation';
+import { getDictionary, hasLocale, locales } from '@/lib/dictionary';
+import { getWhatsappUrl } from '@/lib/studio';
 import Navbar from '@/components/navigation/Navbar';
 import Footer from '@/components/navigation/Footer';
+import WhatsappIcon from '@/components/icons/WhatsappIcon';
 import '@/app/globals.css';
 
 const playfair = Playfair_Display({
@@ -18,6 +21,10 @@ const inter = Inter({
   weight: ['300', '400', '500', '600', '700'],
   display: 'swap',
 });
+
+export function generateStaticParams() {
+  return locales.map((locale) => ({ locale }));
+}
 
 export async function generateMetadata(
   props: { params: Promise<{ locale: string }> }
@@ -64,7 +71,8 @@ export default async function LocaleLayout(
 ) {
   const params = await props.params;
   const { children } = props;
-  const locale = (params.locale as Locale) || 'tr';
+  if (!hasLocale(params.locale)) notFound();
+  const locale = params.locale;
   const dict = await getDictionary(locale);
 
   return (
@@ -82,7 +90,24 @@ export default async function LocaleLayout(
         </main>
         
         {/* Footer block */}
-        <Footer locale={locale} dict={{ ...dict.nav, ...dict.contact_page }} />
+        <Footer locale={locale} dict={{ ...dict.nav, ...dict.footer }} />
+
+        {/* Floating WhatsApp Quick Contact Button */}
+        <a
+          href={getWhatsappUrl(dict.hero.whatsapp_message)}
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label={dict.hero.cta_whatsapp}
+          className="fixed bottom-6 right-6 z-50 bg-emerald-600 hover:bg-emerald-700 text-white p-3.5 rounded-full shadow-2xl transition-all duration-300 hover:scale-110 flex items-center gap-2.5 group border-2 border-white/20"
+        >
+          <div className="relative flex items-center justify-center">
+            <span className="absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75 animate-ping" />
+            <WhatsappIcon className="w-6 h-6 relative z-10" />
+          </div>
+          <span className="max-w-0 overflow-hidden group-hover:max-w-xs transition-all duration-500 ease-in-out whitespace-nowrap text-xs font-semibold uppercase tracking-wider pr-1">
+            {locale === 'tr' ? 'Hızlı İletişim' : 'WhatsApp Contact'}
+          </span>
+        </a>
       </body>
     </html>
   );

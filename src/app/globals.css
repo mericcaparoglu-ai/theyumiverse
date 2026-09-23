@@ -80,3 +80,11 @@ h1, h2, h3, h4, h5, h6 {
   line-height: 1.1;
   font-weight: 300;
 }
+
+/* Hide scrollbars on horizontally scrollable strips (e.g. mobile day tabs) */
+@utility scrollbar-none {
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
