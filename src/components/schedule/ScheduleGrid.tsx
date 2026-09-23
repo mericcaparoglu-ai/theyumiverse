@@ -16,9 +16,11 @@ interface ScheduleGridProps {
 
 // Weekly timetable (Mon–Fri). Class names come from CLASS_TYPES, trainers from TRAINERS.
 // c6 = Reformer Grup (Maks. 7 Kişi) · Ümran Solmaz | c7 = Hatha Yoga · Meriç Çaparoğlu
+// Hatha Yoga slots run in parallel with a Reformer group class in the reformer room.
 const MOCK_SCHEDULE = [
   // Pazartesi / Monday
   { id: 's101', class_id: 'c7', trainer_id: 't2', day: 1, time: '09:00', capacity: 10, booked: 0 },
+  { id: 's106', class_id: 'c6', trainer_id: 't1', day: 1, time: '09:00', capacity: 7, booked: 0 },
   { id: 's102', class_id: 'c6', trainer_id: 't1', day: 1, time: '10:00', capacity: 7, booked: 0 },
   { id: 's103', class_id: 'c6', trainer_id: 't1', day: 1, time: '17:30', capacity: 7, booked: 0 },
   { id: 's104', class_id: 'c6', trainer_id: 't1', day: 1, time: '18:30', capacity: 7, booked: 0 },
@@ -30,9 +32,11 @@ const MOCK_SCHEDULE = [
   { id: 's203', class_id: 'c6', trainer_id: 't1', day: 2, time: '17:30', capacity: 7, booked: 0 },
   { id: 's204', class_id: 'c6', trainer_id: 't1', day: 2, time: '18:30', capacity: 7, booked: 0 },
   { id: 's205', class_id: 'c7', trainer_id: 't2', day: 2, time: '19:30', capacity: 10, booked: 0 },
+  { id: 's206', class_id: 'c6', trainer_id: 't1', day: 2, time: '19:30', capacity: 7, booked: 0 },
 
   // Çarşamba / Wednesday
   { id: 's301', class_id: 'c7', trainer_id: 't2', day: 3, time: '09:00', capacity: 10, booked: 0 },
+  { id: 's306', class_id: 'c6', trainer_id: 't1', day: 3, time: '09:00', capacity: 7, booked: 0 },
   { id: 's302', class_id: 'c6', trainer_id: 't1', day: 3, time: '10:00', capacity: 7, booked: 0 },
   { id: 's303', class_id: 'c6', trainer_id: 't1', day: 3, time: '17:30', capacity: 7, booked: 0 },
   { id: 's304', class_id: 'c6', trainer_id: 't1', day: 3, time: '18:30', capacity: 7, booked: 0 },
@@ -44,6 +48,7 @@ const MOCK_SCHEDULE = [
   { id: 's403', class_id: 'c6', trainer_id: 't1', day: 4, time: '17:30', capacity: 7, booked: 0 },
   { id: 's404', class_id: 'c6', trainer_id: 't1', day: 4, time: '18:30', capacity: 7, booked: 0 },
   { id: 's405', class_id: 'c7', trainer_id: 't2', day: 4, time: '19:30', capacity: 10, booked: 0 },
+  { id: 's406', class_id: 'c6', trainer_id: 't1', day: 4, time: '19:30', capacity: 7, booked: 0 },
 
   // Cuma / Friday
   { id: 's501', class_id: 'c6', trainer_id: 't1', day: 5, time: '09:00', capacity: 7, booked: 0 },
@@ -130,9 +135,10 @@ export default function ScheduleGrid({
         grouped[item.day].push(item);
       }
     });
-    // Sort day items by time
+    // Sort day items by time; parallel classes at the same time keep a fixed,
+    // language-independent order (by session id) so /tr and /en match.
     Object.keys(grouped).forEach((d) => {
-      grouped[Number(d)].sort((a, b) => a.time.localeCompare(b.time));
+      grouped[Number(d)].sort((a, b) => a.time.localeCompare(b.time) || a.id.localeCompare(b.id));
     });
     return grouped;
   }, [filteredSchedule]);
